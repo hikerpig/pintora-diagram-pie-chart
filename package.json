@@ -1,7 +1,7 @@
 {
   "name": "pintora-diagram-pie-chart",
   "version": "0.0.1",
-  "description": "An example pieChart diagram plugin for pintora.js ",
+  "description": "An example pie diagram plugin for pintora.js ",
   "module": "dist/pintora-diagram-pie-chart.esm.js",
   "umd": "dist/pintora-diagram-pie-chart.umd.js",
   "source": "src/index.ts",

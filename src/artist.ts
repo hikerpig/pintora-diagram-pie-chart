@@ -3,13 +3,13 @@ import pintora from '@pintora/standalone'
 import { PieChartDiagramIR } from './type'
 
 const PIE_COLORS = [
-  'red',
-  'orange',
-  'yellow',
-  'green',
-  'cyan',
-  'blue',
-  'purple'
+  '#ecb3b2',
+  '#efc9b3',
+  '#f5f6b8',
+  '#c6f4b7',
+  '#bce6f5',
+  '#cdb2f2',
+  '#ecb4ee'
 ]
 
 const LEGEND_SQUARE_SIZE = 20
