@@ -5,5 +5,11 @@ An example of adding custom diagram to [pintora](https://github.com/hikerpig/pin
 ## Develop
 
 ```
-npm run watch
+npm run dev
+```
+
+## Build
+
+```
+npm run build
 ```
