@@ -11,4 +11,4 @@ const pieChartDiagram: IDiagram<PieChartDiagramIR> = {
   clear() {}
 }
 
-pintora.registerDiagram('pieChart', pieChartDiagram)
+pintora.diagramRegistry.registerDiagram('pieChart', pieChartDiagram)

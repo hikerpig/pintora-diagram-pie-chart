@@ -7,7 +7,7 @@
   "source": "src/index.ts",
   "scripts": {
     "watch": "microbundle --no-compress --globals @pintora/standalone=pintora --external @pintora/*  -f umd --watch",
-    "test": ""
+    "build": "microbundle --globals @pintora/standalone=pintora --external @pintora/* -f umd"
   },
   "keywords": [
     "pintora-diagram"
@@ -15,7 +15,7 @@
   "author": "hikerpig",
   "license": "MIT",
   "devDependencies": {
-    "@pintora/standalone": "^0.1.0-alpha.5",
+    "@pintora/standalone": "^0.1.0-alpha.6",
     "microbundle": "^0.13.3",
     "typescript": "^4.3.5"
   }
