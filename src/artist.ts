@@ -145,7 +145,12 @@ const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
       )
       maxLabelRight = Math.max(maxLabelRight, labelX + labelDims.width)
 
-      rootMark.children.push(sectorMark, pLabel, legendSquare, legendLabel)
+      const itemGroup: Group = {
+        type: 'group',
+        children: [sectorMark, pLabel, legendSquare, legendLabel],
+        class: 'pie__item'
+      }
+      rootMark.children.push(itemGroup)
     })
 
     const diagramWidth = maxLabelRight + conf.diagarmPadding
