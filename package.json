@@ -17,7 +17,7 @@
   "author": "hikerpig",
   "license": "MIT",
   "devDependencies": {
-    "@pintora/standalone": "^0.1.0-alpha.6",
+    "@pintora/standalone": "^0.1.0-alpha.21",
     "live-server": "^1.2.1",
     "microbundle": "^0.13.3",
     "typescript": "^4.3.5"
