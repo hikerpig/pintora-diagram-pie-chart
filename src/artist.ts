@@ -1,8 +1,8 @@
 import { IDiagramArtist, GraphicsIR, Group } from '@pintora/core'
-import pintora, { IFont } from '@pintora/standalone'
+import pintora, { IFont, PintoraConfig } from '@pintora/standalone'
 import { PieChartDiagramIR } from './type'
 
-const PIE_COLORS = [
+const DEFAULT_PIE_COLORS = [
   '#ecb3b2',
   '#efc9b3',
   '#f5f6b8',
@@ -19,21 +19,25 @@ const LEGEND_FONT: IFont = {
   fontWeight: 'normal',
 }
 
-type PieConf = {
-  diagarmPadding: number
-  diagramBackgroundColor: string
-  circleRadius: number
-}
+type PieConf = PintoraConfig['pie']
 
-const conf: PieConf = {
+// default config
+const defaultConfig: PieConf = {
   diagarmPadding: 10,
   diagramBackgroundColor: '#F9F9F9',
   circleRadius: 150,
+  pieColors: DEFAULT_PIE_COLORS
 }
 
+pintora.setConfig({
+  pie: { ...defaultConfig },
+})
+
 const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
-  draw(diagramIR) {
-    // console.log('draw', diagramIR)
+  draw(diagramIR, config) {
+    // console.log('draw', diagramIR, config)
+    const conf: PieConf = Object.assign({}, pintora.getConfig().pie, config || {})
+
     const rootMark: Group = {
       type: 'group',
       children: [],
@@ -74,7 +78,7 @@ const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
     let currentLabelY = legendStart.y
     let maxLabelRight = 0
     diagramIR.items.forEach((item, i) => {
-      const fillColor = PIE_COLORS[i % PIE_COLORS.length]
+      const fillColor = conf.pieColors[i % conf.pieColors.length]
       const rad = (item.count / diagramIR.sum) * RAD_OF_A_CIRCLE
       const destRad = currentRad + rad
       const arcStartX = radius * Math.cos(currentRad)
