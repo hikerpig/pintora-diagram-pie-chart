@@ -16,6 +16,9 @@
   ],
   "author": "hikerpig",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@pintora/standalone": "^0.1.0-alpha.21",
     "live-server": "^1.2.1",
