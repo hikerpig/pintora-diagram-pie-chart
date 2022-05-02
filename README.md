@@ -5,12 +5,12 @@ An example of adding custom diagram to [pintora](https://github.com/hikerpig/pin
 
 ## Develop
 
-```
+```sh
 npm run dev
 ```
 
 ## Build
 
-```
+```sh
 npm run build
 ```

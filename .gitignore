@@ -1,5 +1,6 @@
 # project
 dist/
+src/parser/*.ts
 
 # Dependency directories
 node_modules/
