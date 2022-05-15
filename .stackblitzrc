@@ -1,0 +1,6 @@
+{
+  "startCommand": "npm run prepare && npm run build && npm run dev",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
