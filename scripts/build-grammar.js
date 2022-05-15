@@ -7,5 +7,6 @@ compileGrammar({
   input: path.join('src/parser/pieChart.ne'),
   output: path.join('src/parser/pieChart.ts'),
   basePath: packagePath,
-  includePaths: []
+  includePaths: [],
+  executeCommand: 'npx',
 })

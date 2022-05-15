@@ -11,7 +11,7 @@
     "dev": "node scripts/dev.js",
     "build": "microbundle --globals @pintora/standalone=pintora --external @pintora/* -f umd,esm",
     "build-grammar": "node scripts/build-grammar.js",
-    "prepare": "npm run build-grammar && npm run build"
+    "prepare": "npm run build-grammar && cd demo && npm install"
   },
   "keywords": [
     "pintora-diagram"
@@ -22,8 +22,8 @@
     "dist"
   ],
   "devDependencies": {
-    "@pintora/development-kit": "^0.1.0",
-    "@pintora/standalone": "^0.4.4",
+    "@pintora/development-kit": "^0.1.1",
+    "@pintora/standalone": "^0.5.1",
     "microbundle": "^0.13.3",
     "typescript": "^4.3.5"
   }
