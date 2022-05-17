@@ -38,14 +38,15 @@ start -> __ start {% (d) => d[1] %}
 
 document -> null
   | document statementWrap {%
-    function(d) {
-      let r = d[0]
-      if (d[1]) {
-        r = d[0].concat(d[1])
+      function(d) {
+        let r = d[0]
+        if (d[1]) {
+          r = d[0].concat(d[1])
+        }
+        return r
       }
-      return r
-    }
-  %}
+    %}
+  | __ document {% (d) => d[1] %}
 
 statementWrap ->
     %WS:? statement {% (d) => {
