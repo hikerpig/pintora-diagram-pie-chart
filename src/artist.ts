@@ -87,6 +87,7 @@ const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
         x: radius * Math.cos(destRad),
         y: radius * Math.sin(destRad),
       }
+      const largeArcFlag = rad > Math.PI ? 1 : 0
       const sectorMark = pintora.util.makeMark('path', {
         path: [
           ['M', circleCenter.x, circleCenter.y],
@@ -96,7 +97,7 @@ const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
             radius,
             radius,
             currentRad,
-            0,
+            largeArcFlag,
             1,
             arcEndRel.x - arcStartX,
             arcEndRel.y - arcStartY,
