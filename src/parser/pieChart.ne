@@ -4,24 +4,24 @@
 @builtin "number.ne"
 
 @{%
-
 import * as moo from '@hikerpig/moo'
-import type { Action } from '../parser'
+import type { Action, NearleyParserResult } from '../parser'
 
 let lexer = moo.compile({
-  NL: { match: /[\n\r]/, lineBreaks: true },
-  WS: { match: / +/, lineBreaks: false },
-  TITLE: { match: /title/ },
+  NL: { match: /[\n\r]/, lineBreaks: true }, // new line
+  WS: { match: / +/, lineBreaks: false }, // white space
+  TITLE: { match: /title/ }, // keyword title
   QUOTED_WORD: /\"[^"]*\"/,
   WORD: { match: /(?:[a-zA-Z0-9_]\p{Unified_Ideograph})+/, fallback: true } ,
 })
 
-/** token value */
+/** get token value */
 function tv(token) {
   if (token && 'value' in token) return token.value
   return token
 }
 
+/** get inner string from a QUOTED_WORD token */
 function getQuotedString(t) {
   const v = tv(t)
   return v.slice(1, v.length - 1)
@@ -31,15 +31,15 @@ function getQuotedString(t) {
 
 start -> __ start {% (d) => d[1] %}
   | "pie" document {%
-      function(d) {
-        return d[1]
+      (d) => {
+        return d[1] as NearleyParserResult
       }
     %}
 
 document -> null
   | document statementWrap {%
-      function(d) {
-        let r = d[0]
+      (d) => {
+        let r: NearleyParserResult = d[0]
         if (d[1]) {
           r = d[0].concat(d[1])
         }
@@ -48,29 +48,31 @@ document -> null
     %}
   | __ document {% (d) => d[1] %}
 
+# handles leading spaces and empty lines
 statementWrap ->
     %WS:? statement {% (d) => {
-      return d[1]
+      return d[1] as Action
     } %}
   | %WS:? %NL {% null %}
 
+# real statement
 statement ->
     %TITLE %WS words %WS:? %NL {%
-      function(d) {
+      (d) => {
         return { type: "title", title: d[2] } as Action
       }
     %}
   | %QUOTED_WORD %WS decimal %WS:? %NL {%
-      function(d) {
+      (d) => {
         const name = getQuotedString(d[0])
         return { type: "record", name, count: d[2] } as Action
       }
-    %}
+    %} # `"peach" 5`
 
-identifier -> [a-zA-Z0-9_]:+
-
-words -> (%WORD | %WS):+ {%
-      function(d) {
+# words and spaces
+words ->
+    (%WORD | %WS):+ {%
+      (d) => {
         return d[0].map(a => a[0]).map(o => tv(o)).join('')
       }
     %}

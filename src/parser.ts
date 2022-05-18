@@ -6,12 +6,13 @@ import nearley from '@hikerpig/nearley'
 const parser: IDiagramParser<PieChartDiagramIR> = {
   parse(input: string) {
     const nParser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar))
+
     // a hack to add a new line as EOF, https://github.com/kach/nearley/issues/194
     const textToParse = input[input.length - 1] !== '\n' ? input + '\n' : input
 
     nParser.feed(textToParse)
-    let results = nParser.finish()
-    // console.log('result', results)
+
+    let results: NearleyParserResult<Action> = nParser.finish()
     // dedupe ambigous results
     if (Array.isArray(results[0])) {
       results = results[0]
@@ -25,6 +26,10 @@ const parser: IDiagramParser<PieChartDiagramIR> = {
     return ir
   },
 }
+
+export type NearleyParserResult<T = Action> = Array<NearleyParserResultItem<T>> | NearleyParserResultItem<T>
+
+export type NearleyParserResultItem<T> = T[] | T | null
 
 /**
  * Semantic action type and payloads
@@ -49,7 +54,7 @@ type ActionHandler<D, T extends keyof ActionPayloads> = (
 ) => unknown
 
 /**
- * accept semantic action list with `apply` method
+ * Accept semantic actions to prepare DiagramIR
  */
 class PieInterpreter {
   title = ''
@@ -67,6 +72,7 @@ class PieInterpreter {
   }
 
   getDiagramIR(): PieChartDiagramIR {
+    // calculate sum
     const sum = this.items.reduce((sum, item) => sum + item.count, 0)
     return {
       title: this.title,
@@ -75,7 +81,10 @@ class PieInterpreter {
     }
   }
 
-  apply(action: Action | Action[] | null) {
+  /**
+   * Apply semantic actions to change interpreter's inner state
+   */
+  apply(action: NearleyParserResult) {
     if (!action) return
 
     if (Array.isArray(action)) {
