@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pie chart demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.73/dist/themes/light.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.73/dist/shoelace.js"
+    ></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>pie chart demo</title>
-</head>
+  <body>
+    <section>
+      <div class="pintora"></div>
+      <div class="preview-result"></div>
+    </section>
+    <div class="controls">
+      <h2>Controls</h2>
+      <form id="form">
+        <sl-textarea label="Source" id="editor" rows="10"></sl-textarea>
+        <sl-input
+          type="number"
+          name="circleRadius"
+          value="150"
+          label="Circle Radius"
+        ></sl-input>
 
-<body>
-  <section>
-    <div class="pintora"></div>
-    <div class="preview-result"></div>
-  </section>
-  <div class="controls">
-    <h2>Controls</h2>
-    <form id="form">
+        <div>
+          <sl-button variant="primary" id="update-btn">Update Config</sl-button>
+        </div>
+      </form>
+    </div>
 
-      <textarea name="source" id="editor" cols="30" rows="10">
-pie 
-  title Bag of Fruits
-  "apple" 5
-  "peach" 6 
-  "banana" 20
-    </textarea>
-      <label for="">circleRadius</label>
-      <input type="number" name="circleRadius" value="150">
-    </form>
-  </div>
-
-  <script src="./src/main.ts" type="module"></script>
-
-</body>
-
+    <script src="./src/main.ts" type="module"></script>
+  </body>
 </html>
