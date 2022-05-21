@@ -1,4 +1,4 @@
-import { IDiagramArtist, GraphicsIR, Group } from '@pintora/core'
+import { IDiagramArtist, GraphicsIR, Group, ConfigParam } from '@pintora/core'
 import pintora, { IFont, PintoraConfig } from '@pintora/standalone'
 import { PieChartDiagramIR } from './type'
 
@@ -26,7 +26,7 @@ const defaultConfig: PieConf = {
   diagarmPadding: 10,
   diagramBackgroundColor: '#F9F9F9',
   circleRadius: 150,
-  pieColors: DEFAULT_PIE_COLORS
+  pieColors: DEFAULT_PIE_COLORS,
 }
 
 pintora.setConfig({
@@ -36,7 +36,7 @@ pintora.setConfig({
 const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
   draw(diagramIR, config) {
     // console.log('draw', diagramIR, config)
-    const conf: PieConf = Object.assign({}, pintora.getConfig().pie, config || {})
+    const conf: PieConf = getConf(diagramIR, config)
 
     const rootMark: Group = {
       type: 'group',
@@ -153,7 +153,7 @@ const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
       const itemGroup: Group = {
         type: 'group',
         children: [sectorMark, pLabel, legendSquare, legendLabel],
-        class: 'pie__item'
+        class: 'pie__item',
       }
       rootMark.children.push(itemGroup)
     })
@@ -168,6 +168,37 @@ const pieChartArtist: IDiagramArtist<PieChartDiagramIR> = {
     }
     return graphicsIR
   },
+}
+
+type DiagramConfigContext = {
+  configParams: ConfigParam[]
+  overrideConfig: Partial<PintoraConfig>
+}
+
+function getConf(
+  configContext: DiagramConfigContext,
+  extraConfig: unknown
+): PieConf {
+  const { configParams, overrideConfig } = configContext
+  const conf: PieConf = Object.assign(
+    {},
+    pintora.getConfig().pie,
+    extraConfig || {}
+  )
+  if (overrideConfig && overrideConfig.pie) {
+    Object.assign(conf, overrideConfig.pie)
+  }
+  if (configParams) {
+    for (const configParam of configParams) {
+      switch (configParam.key) {
+        case 'circleRadius': {
+          conf.circleRadius = parseFloat(configParam.value)
+          break
+        }
+      }
+    }
+  }
+  return conf
 }
 
 export default pieChartArtist

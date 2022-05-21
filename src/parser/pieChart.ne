@@ -1,7 +1,13 @@
 @preprocessor typescript
 @lexer lexer
-@builtin "whitespace.ne"
+
 @builtin "number.ne"
+@builtin "postprocessors.ne"
+
+# include pintora diagrams' shared grammars
+@include "whitespace.ne"
+@include "config.ne"
+@include "comment.ne"
 
 @{%
 import * as moo from '@hikerpig/moo'
@@ -12,7 +18,11 @@ let lexer = moo.compile({
   WS: { match: / +/, lineBreaks: false }, // white space
   TITLE: { match: /title/ }, // keyword title
   QUOTED_WORD: /\"[^"]*\"/,
-  WORD: { match: /(?:[a-zA-Z0-9_]\p{Unified_Ideograph})+/, fallback: true } ,
+  L_PAREN,
+  R_PAREN,
+  CONFIG_DIRECTIVE,
+  PARAM_DIRECTIVE,
+  WORD: { match: /(?:[a-zA-Z0-9_]\p{Unified_Ideograph})+/, fallback: true },
 })
 
 /** get token value */
@@ -68,6 +78,10 @@ statement ->
         return { type: "record", name, count: d[2] } as Action
       }
     %} # `"peach" 5`
+  | paramStatement %NL {% nth(0) %}
+  | configOpenCloseStatement %NL {% nth(0) %}
+  | comment %NL # from 'comment.ne'
+
 
 # words and spaces
 words ->
