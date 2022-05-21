@@ -10,6 +10,12 @@ const updateBtn = document.getElementById('update-btn')
 const form = document.getElementById('form')! as HTMLFormElement
 const config: Partial<PintoraConfig['pie']> = {}
 const INIT_SOURCE = `pie 
+  @param circleRadius 200
+  @config({
+    "pie": {
+      "diagarmPadding": 20
+    }
+  })
   title Bag of Fruits
   "apple" 5
   "peach" 6 

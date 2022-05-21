@@ -1,7 +1,11 @@
-import { IDiagramParser } from '@pintora/core'
-import { PieChartDiagramIR, Item } from './type'
-import grammar from './parser/pieChart'
 import nearley from '@hikerpig/nearley'
+import { ConfigParam, IDiagramParser, PintoraConfig } from '@pintora/core'
+import type {
+  OverrideConfigAction,
+  ParamAction,
+} from '@pintora/diagrams/shared-grammars/config'
+import grammar from './parser/pieChart'
+import { Item, PieChartDiagramIR } from './type'
 
 const parser: IDiagramParser<PieChartDiagramIR> = {
   parse(input: string) {
@@ -27,7 +31,9 @@ const parser: IDiagramParser<PieChartDiagramIR> = {
   },
 }
 
-export type NearleyParserResult<T = Action> = Array<NearleyParserResultItem<T>> | NearleyParserResultItem<T>
+export type NearleyParserResult<T = Action> =
+  | Array<NearleyParserResultItem<T>>
+  | NearleyParserResultItem<T>
 
 export type NearleyParserResultItem<T> = T[] | T | null
 
@@ -40,6 +46,8 @@ type ActionPayloads = {
     name: string
     count: number
   }
+  addParam: ParamAction
+  overrideConfig: OverrideConfigAction
 }
 
 type ActionObj<K extends keyof ActionPayloads> = {
@@ -60,6 +68,9 @@ class PieInterpreter {
   title = ''
   items: Item[] = []
 
+  configParams: ConfigParam[] = []
+  overrideConfig: Partial<PintoraConfig> = {}
+
   ACTION_HANDLERS: {
     [K in keyof ActionPayloads]: ActionHandler<PieInterpreter, K>
   } = {
@@ -68,6 +79,12 @@ class PieInterpreter {
     },
     record(action) {
       this.items.push({ name: action.name, count: action.count })
+    },
+    addParam(action) {
+      this.configParams.push(action)
+    },
+    overrideConfig(action) {
+      this.addOverrideConfig(action)
     },
   }
 
@@ -78,6 +95,8 @@ class PieInterpreter {
       title: this.title,
       items: this.items,
       sum,
+      configParams: this.configParams,
+      overrideConfig: this.overrideConfig,
     }
   }
 
@@ -95,6 +114,14 @@ class PieInterpreter {
     }
     if (action.type in this.ACTION_HANDLERS) {
       this.ACTION_HANDLERS[action.type].call(this, action as any)
+    }
+  }
+
+  protected addOverrideConfig(action: OverrideConfigAction) {
+    if ('error' in action) {
+      console.error(action.error)
+    } else {
+      this.overrideConfig = action.value
     }
   }
 }

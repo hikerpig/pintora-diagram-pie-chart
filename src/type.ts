@@ -1,3 +1,6 @@
+import { ConfigParam } from '@pintora/core'
+import { PintoraConfig } from '@pintora/core'
+
 // type augmentation
 declare module '@pintora/core' {
   interface PintoraConfig {
@@ -19,4 +22,6 @@ export type PieChartDiagramIR = {
   title: string
   items: Item[]
   sum: number
+  configParams: ConfigParam[]
+  overrideConfig: Partial<PintoraConfig>
 }
